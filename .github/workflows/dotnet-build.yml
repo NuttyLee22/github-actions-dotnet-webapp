@@ -1,0 +1,30 @@
+name: .NET Build
+
+on:
+  push:
+    branches:
+      - '**' 
+  schedule:
+    - cron: '0 * * * *' 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' 
+
+      - name: Restaurar dependencias
+        run: dotnet restore
+
+      - name: Compilar
+        run: dotnet build --no-restore
+
+      - name: Rodar testes
+        run: dotnet test --no-build --verbosity normal
